@@ -5,6 +5,10 @@
  */
 package instrumentsignouthelper;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 /**
  *
  * @author Brandon
@@ -16,6 +20,31 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        timer.start();
+    }
+    //Static string to determine what screen to set visible
+    public static String panel = "menuPanel";
+
+    Timer timer = new Timer(10, new TimerListener());
+
+    public static void checkPanel() {
+        
+        if (panel.equals("signOut")) {
+            menuPanel.setVisible(false);
+            signInPanel.setVisible(false);
+            signOutPanel.setVisible(true);           
+        }else if(panel.equals("addPanel")){
+            //code
+        }else if(panel.equals("signIn")){
+            signOutPanel.setVisible(false);
+            menuPanel.setVisible(false);
+            signInPanel.setVisible(true);
+        }else if(panel.equals("back")){
+            signOutPanel.setVisible(false);
+            signInPanel.setVisible(false);
+            menuPanel.setVisible(true);
+        }
+
     }
 
     /**
@@ -27,26 +56,28 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menuScreen1 = new instrumentsignouthelper.MenuScreen();
+        mainPanel = new javax.swing.JPanel();
+        menuPanel = new instrumentsignouthelper.MenuPanel();
+        signOutPanel = new instrumentsignouthelper.SignOutPanel();
+        signInPanel = new instrumentsignouthelper.SignInPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Instrument Sign Out Helper");
-        setPreferredSize(new java.awt.Dimension(800, 650));
         setResizable(false);
+
+        mainPanel.setLayout(new java.awt.CardLayout());
+        mainPanel.add(menuPanel, "card2");
+        mainPanel.add(signOutPanel, "card3");
+        mainPanel.add(signInPanel, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(menuScreen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(menuScreen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -88,6 +119,21 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private instrumentsignouthelper.MenuScreen menuScreen1;
+    private static javax.swing.JPanel mainPanel;
+    private static instrumentsignouthelper.MenuPanel menuPanel;
+    private static instrumentsignouthelper.SignInPanel signInPanel;
+    private static instrumentsignouthelper.SignOutPanel signOutPanel;
     // End of variables declaration//GEN-END:variables
+
+    private static class TimerListener implements ActionListener {
+
+        public TimerListener() {
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            checkPanel();
+        }
+    }
+
 }

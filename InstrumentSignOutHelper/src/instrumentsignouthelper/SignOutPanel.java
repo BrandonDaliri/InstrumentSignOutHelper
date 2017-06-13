@@ -5,9 +5,13 @@
  */
 package instrumentsignouthelper;
 
+import Objects.Instrument;
+import Objects.Student;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.ImageIcon;
 
 /**
@@ -21,7 +25,9 @@ public class SignOutPanel extends javax.swing.JPanel {
      */
     public SignOutPanel() {
         initComponents();
+
     }
+    Calendar c = null;
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -41,17 +47,20 @@ public class SignOutPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        barcodeField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        fNameField = new javax.swing.JTextField();
+        lNameField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        instrumentBarcodeField = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jButton2 = new javax.swing.JButton();
+        quantity = new javax.swing.JSpinner();
+        signOutBtn = new javax.swing.JButton();
+        dayField = new javax.swing.JTextField();
+        monthField = new javax.swing.JTextField();
+        yearField = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(102, 51, 0));
 
@@ -67,7 +76,7 @@ public class SignOutPanel extends javax.swing.JPanel {
             }
         });
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        barcodeField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -77,24 +86,29 @@ public class SignOutPanel extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Student Name:");
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField2.setText("First Name");
-        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+        fNameField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        fNameField.setForeground(new java.awt.Color(102, 102, 102));
+        fNameField.setText("First Name");
+        fNameField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextField2FocusGained(evt);
+                fNameFieldFocusGained(evt);
+            }
+        });
+        fNameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fNameFieldActionPerformed(evt);
             }
         });
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField3.setText("Last Name");
-        jTextField3.addFocusListener(new java.awt.event.FocusAdapter() {
+        lNameField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lNameField.setForeground(new java.awt.Color(102, 102, 102));
+        lNameField.setText("Last Name");
+        lNameField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextField3FocusGained(evt);
+                lNameFieldFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField3FocusLost(evt);
+                lNameFieldFocusLost(evt);
             }
         });
 
@@ -102,7 +116,12 @@ public class SignOutPanel extends javax.swing.JPanel {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Instrument Barcode:");
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        instrumentBarcodeField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        instrumentBarcodeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                instrumentBarcodeFieldActionPerformed(evt);
+            }
+        });
 
         jTextField5.setEditable(false);
         jTextField5.setBackground(new java.awt.Color(230, 230, 230));
@@ -113,8 +132,48 @@ public class SignOutPanel extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Quantity");
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jButton2.setText("Sign Out");
+        quantity.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        quantity.setOpaque(false);
+        quantity.setValue(1);
+
+        signOutBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        signOutBtn.setText("Sign Out");
+        signOutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signOutBtnActionPerformed(evt);
+            }
+        });
+
+        dayField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        dayField.setForeground(new java.awt.Color(102, 102, 102));
+        dayField.setText("DD");
+        dayField.setMinimumSize(new java.awt.Dimension(38, 35));
+        dayField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                dayFieldFocusGained(evt);
+            }
+        });
+
+        monthField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        monthField.setForeground(new java.awt.Color(102, 102, 102));
+        monthField.setText("MM");
+        monthField.setMinimumSize(new java.awt.Dimension(44, 35));
+        monthField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                monthFieldFocusGained(evt);
+            }
+        });
+
+        yearField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        yearField.setForeground(new java.awt.Color(102, 102, 102));
+        yearField.setText("YYYY");
+        yearField.setMinimumSize(new java.awt.Dimension(62, 35));
+        yearField.setRequestFocusEnabled(false);
+        yearField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                yearFieldFocusGained(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -123,32 +182,38 @@ public class SignOutPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2))
+                .addComponent(signOutBtn))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel4)
                                 .addComponent(jLabel3)
                                 .addComponent(jLabel2)
-                                .addComponent(jTextField1)
+                                .addComponent(barcodeField)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(fNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jTextField4)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)))
-                .addContainerGap(280, Short.MAX_VALUE))
+                                    .addComponent(lNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(instrumentBarcodeField)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53)
+                                .addComponent(dayField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(yearField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(320, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,62 +223,103 @@ public class SignOutPanel extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                    .addComponent(lNameField)
+                    .addComponent(fNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(instrumentBarcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dayField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(yearField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         MainFrame.panel = "back";
+        MainFrame.panel = "back";
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained
-        jTextField2.setForeground(Color.black);
-        jTextField2.setText("");
-    }//GEN-LAST:event_jTextField2FocusGained
+    private void fNameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fNameFieldFocusGained
+        fNameField.setForeground(Color.black);
+        fNameField.setText("");
+    }//GEN-LAST:event_fNameFieldFocusGained
 
-    private void jTextField3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField3FocusGained
-        jTextField3.setForeground(Color.black);
-        jTextField3.setText("");
-    }//GEN-LAST:event_jTextField3FocusGained
+    private void lNameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lNameFieldFocusGained
+        lNameField.setForeground(Color.black);
+        lNameField.setText("");
+    }//GEN-LAST:event_lNameFieldFocusGained
 
-    private void jTextField3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField3FocusLost
+    private void lNameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lNameFieldFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3FocusLost
+    }//GEN-LAST:event_lNameFieldFocusLost
+
+    private void signOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutBtnActionPerformed
+        Student s = new Student(fNameField.getText(), lNameField.getText(), barcodeField.getText());
+        System.out.println(s.toString());
+        //add student to signed out database
+        Instrument i = new Instrument(instrumentBarcodeField.getText(), (int) quantity.getValue());
+        System.out.println(i.toString());
+        c.set(Integer.parseInt(yearField.getText()), Integer.parseInt(monthField.getText()) + 1, Integer.parseInt(dayField.getText()));
+
+    }//GEN-LAST:event_signOutBtnActionPerformed
+
+    private void instrumentBarcodeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instrumentBarcodeFieldActionPerformed
+
+    }//GEN-LAST:event_instrumentBarcodeFieldActionPerformed
+
+    private void fNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fNameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fNameFieldActionPerformed
+
+    private void dayFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dayFieldFocusGained
+        dayField.setForeground(Color.black);
+        dayField.setText("");
+    }//GEN-LAST:event_dayFieldFocusGained
+
+    private void monthFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_monthFieldFocusGained
+        monthField.setForeground(Color.black);
+        monthField.setText("");
+    }//GEN-LAST:event_monthFieldFocusGained
+
+    private void yearFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_yearFieldFocusGained
+        yearField.setForeground(Color.black);
+        yearField.setText("");
+    }//GEN-LAST:event_yearFieldFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField barcodeField;
+    private javax.swing.JTextField dayField;
+    private javax.swing.JTextField fNameField;
+    private javax.swing.JTextField instrumentBarcodeField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField lNameField;
+    private javax.swing.JTextField monthField;
+    private javax.swing.JSpinner quantity;
+    private javax.swing.JButton signOutBtn;
+    private javax.swing.JTextField yearField;
     // End of variables declaration//GEN-END:variables
 }

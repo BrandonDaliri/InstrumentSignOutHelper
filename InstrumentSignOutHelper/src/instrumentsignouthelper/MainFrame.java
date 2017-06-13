@@ -5,8 +5,10 @@
  */
 package instrumentsignouthelper;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 /**
@@ -24,6 +26,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
     //Static string to determine what screen to set visible
     public static String panel = "menuPanel";
+    //The window's icon
+    private Image image = new ImageIcon(this.getClass().getResource("guitar.png")).getImage();
 
     Timer timer = new Timer(10, new TimerListener());
 
@@ -43,6 +47,7 @@ public class MainFrame extends javax.swing.JFrame {
             signOutPanel.setVisible(false);
             signInPanel.setVisible(false);
             menuPanel.setVisible(true);
+
         }
 
     }
@@ -62,6 +67,8 @@ public class MainFrame extends javax.swing.JFrame {
         signInPanel = new instrumentsignouthelper.SignInPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Instrument Sign Out Helper");
+        setIconImage(image);
         setResizable(false);
 
         mainPanel.setLayout(new java.awt.CardLayout());

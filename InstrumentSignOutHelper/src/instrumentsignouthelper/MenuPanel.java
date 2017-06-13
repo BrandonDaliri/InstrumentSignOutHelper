@@ -73,6 +73,7 @@ public class MenuPanel extends javax.swing.JPanel {
 
         signOutBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         signOutBtn.setText("Sign Out");
+        signOutBtn.setBorder(null);
         signOutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signOutBtnActionPerformed(evt);

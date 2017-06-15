@@ -7,8 +7,9 @@ package instrumentsignouthelper;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-
+import objects.*;
 
 /**
  *
@@ -21,6 +22,15 @@ public class MenuPanel extends javax.swing.JPanel {
      */
     public MenuPanel() {
         initComponents();
+        Student s = new Student("Brandon", "Daliri", "070029319");
+        Student d = new Student("David", "Blair", "123456789");
+        //setting up jlists
+        DefaultListModel signOutModel = new DefaultListModel();
+        signOutModel.addElement(s.toString()/*database*/);
+        signOutModel.addElement(d.toString());
+        signOutList.setModel(signOutModel);
+        
+
     }
 
     @Override
@@ -40,7 +50,6 @@ public class MenuPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jLabel3 = new javax.swing.JLabel();
@@ -48,6 +57,8 @@ public class MenuPanel extends javax.swing.JPanel {
         signOutBtn = new javax.swing.JButton();
         signInBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        signOutList = new javax.swing.JList<>();
 
         setBackground(new java.awt.Color(92, 58, 16));
 
@@ -55,8 +66,6 @@ public class MenuPanel extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Instrument Sign Out Helper");
-
-        jScrollPane1.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -96,6 +105,11 @@ public class MenuPanel extends javax.swing.JPanel {
             }
         });
 
+        signOutList.setBackground(new java.awt.Color(240, 240, 240));
+        signOutList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        signOutList.setFocusable(false);
+        jScrollPane1.setViewportView(signOutList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,8 +118,8 @@ public class MenuPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2)
@@ -116,7 +130,7 @@ public class MenuPanel extends javax.swing.JPanel {
                     .addComponent(signInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,11 +143,6 @@ public class MenuPanel extends javax.swing.JPanel {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -142,7 +151,12 @@ public class MenuPanel extends javax.swing.JPanel {
                         .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68))))
+                        .addGap(68, 68, 68))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -169,6 +183,7 @@ public class MenuPanel extends javax.swing.JPanel {
     private javax.swing.JButton removeBtn;
     private javax.swing.JButton signInBtn;
     private static javax.swing.JButton signOutBtn;
+    private javax.swing.JList<String> signOutList;
     // End of variables declaration//GEN-END:variables
 
 }

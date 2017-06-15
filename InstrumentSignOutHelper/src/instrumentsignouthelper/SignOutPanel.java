@@ -5,8 +5,7 @@
  */
 package instrumentsignouthelper;
 
-import Objects.Instrument;
-import Objects.Student;
+import objects.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -274,9 +273,10 @@ public class SignOutPanel extends javax.swing.JPanel {
         Student s = new Student(fNameField.getText(), lNameField.getText(), barcodeField.getText());
         System.out.println(s.toString());
         //add student to signed out database
-        Instrument i = new Instrument(instrumentBarcodeField.getText(), (int) quantity.getValue());
+         c.set(Integer.parseInt(yearField.getText()), Integer.parseInt(monthField.getText()) + 1, Integer.parseInt(dayField.getText()));
+        Instrument i = new Instrument(instrumentBarcodeField.getText(), (int) quantity.getValue(), c.toString());
         System.out.println(i.toString());
-        c.set(Integer.parseInt(yearField.getText()), Integer.parseInt(monthField.getText()) + 1, Integer.parseInt(dayField.getText()));
+       
 
     }//GEN-LAST:event_signOutBtnActionPerformed
 

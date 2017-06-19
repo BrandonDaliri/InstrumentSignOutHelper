@@ -14,18 +14,11 @@ public class Instrument {
     private int barcode;//barcode of instrument
     private String name;//name of instrument
     private int quantity;//number of x instrument being signed out
-    private String date;//date the item needs to be returned by
-    public Instrument(String ID, int n, String d){
+    public Instrument(String ID, String na){
         barcode = Integer.parseInt(ID);
-        quantity = n;
-        date = d;
-        checkName();
+        name = na;
     }
     
-    public void checkName(){
-        //parameters for determining instrument name based off barcode
-        name = "Guitar";
-    }
 
     /**
      * @return the barcode
@@ -43,5 +36,26 @@ public class Instrument {
     
     public String toString(){
         return name + ", " + barcode + ", " + quantity;
+    }
+
+    /**
+     * @param barcode the barcode to set
+     */
+    public void setBarcode(int barcode) {
+        this.barcode = barcode;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

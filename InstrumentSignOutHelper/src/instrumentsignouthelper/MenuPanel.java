@@ -7,6 +7,11 @@ package instrumentsignouthelper;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import objects.*;
@@ -22,14 +27,37 @@ public class MenuPanel extends javax.swing.JPanel {
      */
     public MenuPanel() {
         initComponents();
-        Student s = new Student("Brandon", "Daliri", "070029319");
-        Student d = new Student("David", "Blair", "123456789");
+
         //setting up jlists
         DefaultListModel signOutModel = new DefaultListModel();
-        signOutModel.addElement(s.toString()/*database*/);
-        signOutModel.addElement(d.toString());
+
+        //connecting to database
+        Connection connection = null;
+        try {
+
+            connection = DriverManager.getConnection("jdbc:mysql://10.242.78.48/instrumentcheckout", "ics4u", "ics4urocks");
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed");
+
+        }
+        Statement stmt;
+        ResultSet rs = null;
+        //upload data
+        try {
+            stmt = connection.createStatement();
+            String query = "SELECT * FROM instruments";
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                signOutModel.addElement(rs.next());
+            }
+
+        } catch (SQLException ex) {
+        }
+
+        //prints the listModel to the actual list
         signOutList.setModel(signOutModel);
-        
 
     }
 
@@ -51,8 +79,6 @@ public class MenuPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jLabel3 = new javax.swing.JLabel();
         removeBtn = new javax.swing.JButton();
         signOutBtn = new javax.swing.JButton();
         signInBtn = new javax.swing.JButton();
@@ -61,24 +87,29 @@ public class MenuPanel extends javax.swing.JPanel {
         signOutList = new javax.swing.JList<>();
 
         setBackground(new java.awt.Color(92, 58, 16));
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Instrument Sign Out Helper");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Current signed out instruments");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Overdue Instruments");
-
         removeBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         removeBtn.setText("Remove Instrument");
+        removeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeBtnActionPerformed(evt);
+            }
+        });
 
         signOutBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         signOutBtn.setText("Sign Out");
@@ -106,6 +137,7 @@ public class MenuPanel extends javax.swing.JPanel {
         });
 
         signOutList.setBackground(new java.awt.Color(240, 240, 240));
+        signOutList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         signOutList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         signOutList.setFocusable(false);
         jScrollPane1.setViewportView(signOutList);
@@ -118,29 +150,23 @@ public class MenuPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -153,9 +179,7 @@ public class MenuPanel extends javax.swing.JPanel {
                         .addComponent(removeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(68, 68, 68))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -172,14 +196,51 @@ public class MenuPanel extends javax.swing.JPanel {
         MainFrame.panel = "signIn";
     }//GEN-LAST:event_signInBtnActionPerformed
 
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+        /*//setting up jlists
+        DefaultListModel signOutModel = new DefaultListModel();
+
+        //connecting to database
+        Connection connection = null;
+        try {
+
+            connection = DriverManager.getConnection("jdbc:mysql://10.242.72.7/instrumentcheckout", "ics4u", "ics4urocks");
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed");
+
+        }
+        Statement stmt;
+        ResultSet rs = null;
+        //upload data
+        try {
+
+            stmt = connection.createStatement();
+            String query = "SELECT * FROM Students";
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                signOutModel.addElement(rs.next());
+            }
+
+        } catch (SQLException ex) {
+        }
+
+        //prints the listModel to the actual list
+        signOutList.setModel(signOutModel);
+         */
+    }//GEN-LAST:event_formFocusGained
+
+    private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
+        MainFrame.panel = "removePanel";
+    }//GEN-LAST:event_removeBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeBtn;
     private javax.swing.JButton signInBtn;
     private static javax.swing.JButton signOutBtn;

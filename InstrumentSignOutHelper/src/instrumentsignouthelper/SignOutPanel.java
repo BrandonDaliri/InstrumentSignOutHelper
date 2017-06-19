@@ -9,6 +9,11 @@ import objects.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.ImageIcon;
@@ -26,7 +31,7 @@ public class SignOutPanel extends javax.swing.JPanel {
         initComponents();
 
     }
-    Calendar c = null;
+    Calendar c = Calendar.getInstance();
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -53,15 +58,16 @@ public class SignOutPanel extends javax.swing.JPanel {
         lNameField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         instrumentBarcodeField = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         quantity = new javax.swing.JSpinner();
         signOutBtn = new javax.swing.JButton();
-        dayField = new javax.swing.JTextField();
-        monthField = new javax.swing.JTextField();
-        yearField = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(102, 51, 0));
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -122,11 +128,6 @@ public class SignOutPanel extends javax.swing.JPanel {
             }
         });
 
-        jTextField5.setEditable(false);
-        jTextField5.setBackground(new java.awt.Color(230, 230, 230));
-        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField5.setDisabledTextColor(new java.awt.Color(255, 255, 255));
-
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Quantity");
@@ -140,37 +141,6 @@ public class SignOutPanel extends javax.swing.JPanel {
         signOutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signOutBtnActionPerformed(evt);
-            }
-        });
-
-        dayField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        dayField.setForeground(new java.awt.Color(102, 102, 102));
-        dayField.setText("DD");
-        dayField.setMinimumSize(new java.awt.Dimension(38, 35));
-        dayField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                dayFieldFocusGained(evt);
-            }
-        });
-
-        monthField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        monthField.setForeground(new java.awt.Color(102, 102, 102));
-        monthField.setText("MM");
-        monthField.setMinimumSize(new java.awt.Dimension(44, 35));
-        monthField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                monthFieldFocusGained(evt);
-            }
-        });
-
-        yearField.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        yearField.setForeground(new java.awt.Color(102, 102, 102));
-        yearField.setText("YYYY");
-        yearField.setMinimumSize(new java.awt.Dimension(62, 35));
-        yearField.setRequestFocusEnabled(false);
-        yearField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                yearFieldFocusGained(evt);
             }
         });
 
@@ -190,6 +160,10 @@ public class SignOutPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel4)
                                 .addComponent(jLabel3)
@@ -199,19 +173,7 @@ public class SignOutPanel extends javax.swing.JPanel {
                                     .addComponent(fNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                                     .addComponent(lNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(instrumentBarcodeField)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(dayField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(yearField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(instrumentBarcodeField)))))
                 .addContainerGap(320, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -233,18 +195,11 @@ public class SignOutPanel extends javax.swing.JPanel {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(instrumentBarcodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(dayField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(monthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(yearField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -270,13 +225,33 @@ public class SignOutPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_lNameFieldFocusLost
 
     private void signOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutBtnActionPerformed
+        //Instrument i = GET INSTRUMENT FROM DATABASE BASED OFF BARCODE
         Student s = new Student(fNameField.getText(), lNameField.getText(), barcodeField.getText());
-        System.out.println(s.toString());
-        //add student to signed out database
-         c.set(Integer.parseInt(yearField.getText()), Integer.parseInt(monthField.getText()) + 1, Integer.parseInt(dayField.getText()));
-        Instrument i = new Instrument(instrumentBarcodeField.getText(), (int) quantity.getValue(), c.toString());
-        System.out.println(i.toString());
-       
+
+        //add student to signed out database      
+
+
+        //database
+        Connection connection = null;
+        try {
+
+            connection = DriverManager.getConnection("jdbc:mysql://10.242.78.48/instrumentcheckout", "ics4u", "ics4urocks");
+
+        } catch (SQLException e) {
+            System.out.println("connection failed");
+
+        }
+        Statement stmt;
+        ResultSet rs = null;
+        //upload data
+        try {
+            stmt = connection.createStatement();
+            stmt.executeUpdate("INSERT INTO Students "
+                    + "VALUES (" + s.getStudentID() + ", " + s.getFirstName() + ", " + s.getLastName() + ")");
+
+        } catch (SQLException ex) {
+        }
+
 
     }//GEN-LAST:event_signOutBtnActionPerformed
 
@@ -288,25 +263,13 @@ public class SignOutPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_fNameFieldActionPerformed
 
-    private void dayFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dayFieldFocusGained
-        dayField.setForeground(Color.black);
-        dayField.setText("");
-    }//GEN-LAST:event_dayFieldFocusGained
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
 
-    private void monthFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_monthFieldFocusGained
-        monthField.setForeground(Color.black);
-        monthField.setText("");
-    }//GEN-LAST:event_monthFieldFocusGained
-
-    private void yearFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_yearFieldFocusGained
-        yearField.setForeground(Color.black);
-        yearField.setText("");
-    }//GEN-LAST:event_yearFieldFocusGained
+    }//GEN-LAST:event_formFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField barcodeField;
-    private javax.swing.JTextField dayField;
     private javax.swing.JTextField fNameField;
     private javax.swing.JTextField instrumentBarcodeField;
     private javax.swing.JButton jButton1;
@@ -315,11 +278,8 @@ public class SignOutPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField lNameField;
-    private javax.swing.JTextField monthField;
     private javax.swing.JSpinner quantity;
     private javax.swing.JButton signOutBtn;
-    private javax.swing.JTextField yearField;
     // End of variables declaration//GEN-END:variables
 }

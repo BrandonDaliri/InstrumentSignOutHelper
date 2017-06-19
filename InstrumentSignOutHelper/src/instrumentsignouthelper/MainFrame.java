@@ -32,22 +32,42 @@ public class MainFrame extends javax.swing.JFrame {
     Timer timer = new Timer(10, new TimerListener());
 
     public static void checkPanel() {
-        
+
+        //Navigator
         if (panel.equals("signOut")) {
             menuPanel.setVisible(false);
             signInPanel.setVisible(false);
-            signOutPanel.setVisible(true);           
-        }else if(panel.equals("addPanel")){
-            //code
-        }else if(panel.equals("signIn")){
-            signOutPanel.setVisible(false);
+            removePanel.setVisible(false);
+            addPanel.setVisible(false);
+            signOutPanel.setVisible(true);
+
+        } else if (panel.equals("addPanel")) {
             menuPanel.setVisible(false);
-            signInPanel.setVisible(true);
-        }else if(panel.equals("back")){
-            signOutPanel.setVisible(false);
             signInPanel.setVisible(false);
+            signOutPanel.setVisible(false);
+            removePanel.setVisible(false);
+            addPanel.setVisible(true);
+
+        } else if (panel.equals("signIn")) {
+            menuPanel.setVisible(false);
+            signOutPanel.setVisible(false);
+            removePanel.setVisible(false);
+            addPanel.setVisible(false);
+            signInPanel.setVisible(true);
+
+        } else if (panel.equals("back")) {
+            signInPanel.setVisible(false);
+            removePanel.setVisible(false);
+            addPanel.setVisible(false);
+            signOutPanel.setVisible(false);
             menuPanel.setVisible(true);
 
+        } else if (panel.equals("removePanel")) {
+            menuPanel.setVisible(false);
+            signInPanel.setVisible(false);
+            addPanel.setVisible(false);
+            signOutPanel.setVisible(false);
+            removePanel.setVisible(true);
         }
 
     }
@@ -65,6 +85,8 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel = new instrumentsignouthelper.MenuPanel();
         signOutPanel = new instrumentsignouthelper.SignOutPanel();
         signInPanel = new instrumentsignouthelper.SignInPanel();
+        addPanel = new instrumentsignouthelper.AddPanel();
+        removePanel = new instrumentsignouthelper.RemovePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Instrument Sign Out Helper");
@@ -75,6 +97,8 @@ public class MainFrame extends javax.swing.JFrame {
         mainPanel.add(menuPanel, "card2");
         mainPanel.add(signOutPanel, "card3");
         mainPanel.add(signInPanel, "card4");
+        mainPanel.add(addPanel, "card5");
+        mainPanel.add(removePanel, "card6");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,8 +150,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private static instrumentsignouthelper.AddPanel addPanel;
     private static javax.swing.JPanel mainPanel;
     private static instrumentsignouthelper.MenuPanel menuPanel;
+    private static instrumentsignouthelper.RemovePanel removePanel;
     private static instrumentsignouthelper.SignInPanel signInPanel;
     private static instrumentsignouthelper.SignOutPanel signOutPanel;
     // End of variables declaration//GEN-END:variables
